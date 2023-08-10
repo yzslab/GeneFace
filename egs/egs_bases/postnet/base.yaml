@@ -5,13 +5,13 @@ task_cls: tasks.postnet.lm3d_postnet_adv_sync.PostnetAdvSyncTask
 audio2motion_task_cls: tasks.audio2motion.lm3d_vae_sync.VAESyncAudio2MotionTask
 person_binary_data_dir: data/binary/videos
 # postnet training
-postnet_lr: 0.0001
+postnet_lr: 0.00005
 postnet_lambda_adv: 0.85
 postnet_lambda_sync: 0.1
 postnet_lambda_mse: 0.05
 
 # Discriminator
-postnet_disc_lr: 0.0001
+postnet_disc_lr: 0.00005
 discriminator_scheduler_params:
   gamma: 0.5
   step_size: 40000

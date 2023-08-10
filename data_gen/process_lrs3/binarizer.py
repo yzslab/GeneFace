@@ -46,11 +46,11 @@ if __name__ == '__main__':
     os.makedirs(binarized_ds_path, exist_ok=True)
     for prefix in prefixs:
         databuilder = IndexedDatasetBuilder(os.path.join(binarized_ds_path, prefix), gzip=False)
-        raw_base_dir =  '/home/yezhenhui/datasets/raw/lrs3_raw'
+        raw_base_dir =  '/home/yuanzhensheng/src/syncnet_python/outputs/speaker_sync'
         spk_ids = sorted([dir_name.split("/")[-1] for dir_name in glob.glob(raw_base_dir + "/*")])
         spk_id2spk_idx = {spk_id : i for i,spk_id in enumerate(spk_ids) }
         np.save(os.path.join(binarized_ds_path, "spk_id2spk_idx.npy"), spk_id2spk_idx, allow_pickle=True)
-        mp4_names = glob.glob(raw_base_dir + "/*/*.mp4")
+        mp4_names = glob.glob(raw_base_dir + "/*/*.avi")
         cnt = 0
         for i, mp4_name in tqdm.tqdm(enumerate(mp4_names), total=len(mp4_names)):
             if prefix == 'train':
@@ -66,10 +66,10 @@ if __name__ == '__main__':
             hubert_npy_name = os.path.join(raw_base_dir, spk_id, clip_id+"_hubert.npy")
             video_npy_name = os.path.join(raw_base_dir, spk_id, clip_id+"_coeff_pt.npy")
             if (not os.path.exists(audio_npy_name)) or (not os.path.exists(video_npy_name)):
-                print(f"Skip item for not found.")
+                print("Skip {} for not found.".format(mp4_name))
                 continue
             if (not os.path.exists(hubert_npy_name)):
-                print(f"Skip item for hubert_npy not found.")
+                print("Skip {} for hubert_npy not found.".format(mp4_name))
                 continue
             audio_dict = load_audio_npy(audio_npy_name)
             hubert = np.load(hubert_npy_name)

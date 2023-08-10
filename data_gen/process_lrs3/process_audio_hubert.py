@@ -1,12 +1,19 @@
-from transformers import Wav2Vec2Processor, HubertModel
 import soundfile as sf
 import numpy as np
 import torch
 
+from transformers import (
+    Wav2Vec2FeatureExtractor,
+    Wav2Vec2ForPreTraining,
+    Wav2Vec2Model,
+)
+
+model_path = "TencentGameMate/chinese-hubert-large"
+
 print("Loading the Wav2Vec2 Processor...")
-wav2vec2_processor = Wav2Vec2Processor.from_pretrained("facebook/hubert-large-ls960-ft")
+wav2vec2_processor = Wav2Vec2FeatureExtractor.from_pretrained(model_path)
 print("Loading the HuBERT Model...")
-hubert_model = HubertModel.from_pretrained("facebook/hubert-large-ls960-ft")
+hubert_model = Wav2Vec2Model.from_pretrained(model_path)
 
 
 def get_hubert_from_16k_wav(wav_16k_name):
@@ -74,14 +81,14 @@ if __name__ == '__main__':
 
     ### Process short audio clips for LRS3 dataset
     import glob, os, tqdm
-    lrs3_dir = '/home/yezhenhui/datasets/raw/lrs3_raw/'
+    lrs3_dir = '/home/yuanzhensheng/src/syncnet_python/outputs/speaker_sync'
     wav_16k_names = glob.glob(os.path.join(lrs3_dir, '*/*.wav'))
     for wav_16k_name in tqdm.tqdm(wav_16k_names, total=len(wav_16k_names)):
         spk_id = wav_16k_name.split("/")[-2]
         clip_id = wav_16k_name.split("/")[-1][:-4]
         out_name = os.path.join(lrs3_dir, spk_id, clip_id+'_hubert.npy')
         if os.path.exists(out_name):
-            continue
+            os.unlink(out_name)
         speech_16k, _ = sf.read(wav_16k_name)
         hubert_hidden = get_hubert_from_16k_speech(speech_16k)
         np.save(out_name, hubert_hidden.detach().numpy())

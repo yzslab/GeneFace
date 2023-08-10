@@ -256,7 +256,7 @@ class LRS3SeqDataset(Dataset):
         batch = {}
         item_names = [s['item_id'] for s in samples]
         # style_batch = torch.stack([s["style"] for s in samples], dim=0) # [b, 135]
-        x_len = max(s['mel'].size(0) for s in samples)
+        x_len = max(max((s['mel'].size(0), s['hubert'].size(0))) for s in samples)
         x_len = x_len + (self.x_multiply - (x_len % self.x_multiply)) % self.x_multiply
         y_len = x_len // 2
         mel_batch = self._collate_2d([s["mel"] for s in samples], max_len=x_len, pad_value=0) # [b, t_max_y, 64]
@@ -292,7 +292,7 @@ class LRS3SeqDataset(Dataset):
 
     def get_dataloader(self):
         shuffle = True if self.db_key == 'train' else False
-        max_tokens = 60000
+        max_tokens = 20000
         batches_idx = self.batch_by_size(self.ordered_indices(), max_tokens=max_tokens)
         batches_idx = batches_idx * 50
         random.shuffle(batches_idx)

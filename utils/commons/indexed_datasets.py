@@ -98,7 +98,7 @@ class IndexedDataset:
 
 
 class IndexedDatasetBuilder:
-    def __init__(self, path, append=False, max_size=1024 * 1024 * 1024 * 64,
+    def __init__(self, path, append=False, max_size=10240 * 1024 * 1024 * 64,
                  default_idx_size=1024 * 1024 * 16, gzip=False):
         self.path = self.root_path = path
         self.default_idx_size = default_idx_size

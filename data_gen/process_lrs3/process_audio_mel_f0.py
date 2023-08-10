@@ -90,7 +90,7 @@ def extract_mel_f0_from_fname(fname, out_name=None):
 
 if __name__ == '__main__':
     import os, glob
-    lrs3_dir = "/home/yezhenhui/datasets/raw/lrs3_raw"
+    lrs3_dir = "/home/yuanzhensheng/src/syncnet_python/outputs/speaker_sync"
     wav_name_pattern = os.path.join(lrs3_dir, "*/*.wav")
     wav_names = glob.glob(wav_name_pattern)
     wav_names = sorted(wav_names)

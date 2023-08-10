@@ -27,7 +27,7 @@ def lm68_2_lm5(in_lm):
     return lm
 
 def process_video(fname, out_name=None):
-    assert fname.endswith(".mp4")
+    assert fname.endswith(".avi")
     if out_name is None:
         out_name = fname[:-4] + '.npy'
     tmp_name = out_name[:-4] + '.doi'
@@ -110,14 +110,14 @@ if __name__ == '__main__':
     ### Process short video clips for LRS3 dataset
     from argparse import ArgumentParser
     parser = ArgumentParser()
-    parser.add_argument('--lrs3_path', type=int, default='/home/yezhenhui/datasets/raw/lrs3_raw', help='')
+    parser.add_argument('--lrs3_path', type=str, default='/home/yezhenhui/datasets/raw/lrs3_raw', help='')
     parser.add_argument('--process_id', type=int, default=0, help='')
     parser.add_argument('--total_process', type=int, default=1, help='')
     args = parser.parse_args()
 
     import os, glob
-    lrs3_dir = parser.lrs3_path
-    mp4_name_pattern = os.path.join(lrs3_dir, "*/*.mp4")
+    lrs3_dir = args.lrs3_path
+    mp4_name_pattern = os.path.join(lrs3_dir, "*/*.avi")
     mp4_names = glob.glob(mp4_name_pattern)
     mp4_names = sorted(mp4_names)
     if args.total_process > 1:
@@ -129,5 +129,5 @@ if __name__ == '__main__':
             mp4_names = mp4_names[args.process_id * num_samples_per_process : (args.process_id+1) * num_samples_per_process]
     for mp4_name in tqdm(mp4_names, desc='extracting 3DMM...'):
         split_wav(mp4_name)
-        process_video(mp4_name,out_name=mp4_name.replace(".mp4", "_coeff_pt.npy"))
+        process_video(mp4_name,out_name=mp4_name.replace(".avi", "_coeff_pt.npy"))
 
